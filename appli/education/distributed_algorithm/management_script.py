@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 """ Get the iotlab-uip for all experiment nodes """
@@ -105,7 +105,7 @@ class NodeResults(object):
         """ Write neighbours output """
         # Write neighbours table
         with self.open('neighbours.csv') as neigh:
-            print "Neighbours table written to %s" % neigh.name
+            print("Neighbours table written to %s" % neigh.name)
             for key, values in sorted(self.neighbours.items()):
                 neigh.write('{}:{}\n'.format(key, ';'.join(values)))
 
@@ -113,7 +113,7 @@ class NodeResults(object):
         neighb_graph = self._neighbours_graph()
         with self.open('graph.dot') as dot_f:
             out_dot = dot_f.name
-            print "Neighbours dot-graph written to %s" % out_dot
+            print("Neighbours dot-graph written to %s" % out_dot)
             dot_f.write(neighb_graph)
 
         # Generate '.png' graph
@@ -121,11 +121,11 @@ class NodeResults(object):
         cmd = ['dot', '-T', 'png', out_dot, '-o', out_png]
         try:
             subprocess.call(cmd)
-            print "Neighbours graph written to %s" % out_png
+            print("Neighbours graph written to %s" % out_png)
         except OSError:
-            print "graphviz not installed. Can't generate neighbours graph"
-            print "You can run the following command on your comuter:"
-            print "    %s" % ' '.join(cmd)
+            print("graphviz not installed. Can't generate neighbours graph")
+            print("You can run the following command on your comuter:")
+            print("    %s" % ' '.join(cmd))
 
     def _neighbours_graph(self):
         links = self._neighbours_links()
@@ -189,7 +189,7 @@ class NodeResults(object):
     def _write_results_values(self, lambda_=0.0):
         """ Write the results to files """
         all_measures = self.open('results_all.csv')
-        print "Write all values to %s" % all_measures.name
+        print("Write all values to %s" % all_measures.name)
 
         # Generate a false poisson clock timestamp
         # Using a real one would make the experiment take too long.
@@ -218,7 +218,7 @@ class NodeResults(object):
             return  # No final value
 
         all_measures = self.open('final_all.csv')
-        print "Write all final value to %s" % all_measures.name
+        print("Write all final value to %s" % all_measures.name)
 
         # write data for each node
         for node, val_d in self.node_finale_measures.items():
@@ -230,12 +230,12 @@ class NodeResults(object):
     def write_poisson(self):
         """ Write the poisson delay results """
         all_measures = self.open('delay_all.csv')
-        print "Write all final value to %s" % all_measures.name
+        print("Write all final value to %s" % all_measures.name)
 
         for node, values in self.poisson.items():
             # Print 1/mean
             mean = sum(values) / float(len(values))
-            print 'Poisson: %s: 1/mean == %f' % (node, 1./mean)
+            print('Poisson: %s: 1/mean == %f' % (node, 1./mean))
             # Save values in file
             for val in values:
                 all_measures.write('%s,%f\n' % (node, val))
@@ -245,7 +245,7 @@ class NodeResults(object):
     def write_clock(self):
         """ Write the clock results """
         all_measures = self.open('clock_all.csv')
-        print "Write all final value to %s" % all_measures.name
+        print("Write all final value to %s" % all_measures.name)
 
         for node, values in self.clock.items():
             # Save values in file
@@ -354,7 +354,7 @@ def main():
     aggregate serial links of all nodes
     """
     opts = parse()
-    print "Using algorithm: %r" % opts.algo
+    print("Using algorithm: %r" % opts.algo)
     run(opts.algo, opts)
 
 

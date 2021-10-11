@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 """Plot csv values.
@@ -19,30 +19,31 @@ usage_examples="""
 
 for exercices 1 and 2:
 
-    ./plot_values.py results/ex1/results_all.csv
+    ./plot_values.py results/ex_<1|2>/results_all.csv
 
 
 for exercice "clock_convergence"
 
-    ./plot_values.py ex_clock_convergence/clock_all.csv  1,b 2,r
+    ./plot_values.py results/ex_3/clock_all.csv  1,b 2,r
 
 """
 
 
 import argparse
+import textwrap
 from matplotlib import pyplot
 
 
 def plot_values(node, values, val_num, color=None):
     """Plot the values."""
-    print "Printing %s datas" % node,
+    print("Printing %s datas" % node)
     args = []
     if color is not None:
         args += color
 
     t_s = [v[0] for v in values]
     val = [v[val_num] for v in values]
-    print "Diff %r" % (val[0] - val[-1])
+    print("Diff %r" % (val[0] - val[-1]))
     pyplot.plot(t_s, val, *args)
 
 
@@ -74,7 +75,10 @@ def plot_select(sel_str):
     return num, args
 
 
-PARSER = argparse.ArgumentParser()
+PARSER = argparse.ArgumentParser(
+    prog='Plot Values',
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    epilog=textwrap.dedent(usage_examples))
 PARSER.add_argument('--split', default=False, action='store_true')
 PARSER.add_argument('--xkcd', default=False, action='store_true')
 PARSER.add_argument('measures_csv', type=argparse.FileType())

@@ -17,7 +17,7 @@ def broadcast_slow(aggregator, message, delay=DELAY):
 
 def random_gossip_send(aggregator, message, delay=DELAY):
     """ Send message to a random node """
-    node = random.choice(aggregator.keys())
+    node = random.choice(list(aggregator.keys()))
     aggregator._send(node, message + '\n')
     time.sleep(delay)
 
@@ -121,7 +121,7 @@ def clock_convergence(aggregator, lambda_t=0.02, duration=60, **_):
     try:
         time.sleep(duration)
     except KeyboardInterrupt as err:
-        print err
+        print(err)
     finally:
         broadcast_slow(aggregator, 'clock-convergence-stop', 0)
         time.sleep(0.5)
