@@ -1,5 +1,5 @@
 \documentclass[oneside]{article}
-\usepackage{amsmath,amssymb,bbm, url,color}
+\usepackage{amsmath,amssymb, url,color}
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}
 
@@ -16,7 +16,7 @@
 \title{
 {\normalsize Lab sessions for the class}\\[-1mm]
 Distributed Algorithms and Network Systems\\[-1mm]
-{\normalsize MiSCIT Master -- Grenoble -- Fall 2019}\\[-1mm]
+{\normalsize MiSCIT Master -- Grenoble -- Fall 2022}\\[-1mm]
 {\normalsize prepared by Federica Garin, Ga\"{e}tan Harter,  Olivier Fambon, and Fr\'ed\'eric Saint-Marcel}}
 \date{}
 \maketitle
@@ -30,7 +30,7 @@ You will use the experimental platform FIT/IoT-LAB (\url{https://www.iot-lab.inf
 to execute your algorithms on real microcontrollers communicating through radio.\\
 
 You are required to write a report, which will be graded.\\ Send it by e-mail to \texttt{federica.garin@inria.fr}.\\
-Deadline: Sunday, Nov.~17th.\\
+Deadline: Tuesday, Nov.~15th.\\
 
 Recommendations for a good report:
 \begin{itemize}
@@ -45,34 +45,16 @@ The report should contain the results of the three experiments (synchronous cons
 
 \newpage
 
-\section{Configure access and get familiar with IoT-LAB}
+\section{Get familiar with IoT-LAB and configure access}
 
 To familiarize yourself with the use of the platform:
-\begin{itemize}
-\item Read the testbed presentation at: \url{https://www.iot-lab.info/what-is-iot-lab/}
-\end{itemize}
-
-% OLD (2016)
-%%%Then go to the page of tutorials and the following four tutorials (First steps):
-%%%\begin{center} \url{https://www.iot-lab.info/tutorials/} \end{center}
-%%%\begin{itemize}
-%%%\item Configure your SSH access;
-%%%\item Submit an experiment with Web portal: M3 nodes;
-%%%\item Get and compile a firmware code for a M3 node.
-%%%\item Tools$\to$Node-cli client (Update firmware from command line)
-%%%\end{itemize}
-
-Then go to the page of tutorials and the following four tutorials (First steps):
-\begin{center} \url{https://www.iot-lab.info/tutorials/} \end{center}
 \begin{enumerate}
-   \item SSH access (Configure IoT-LAB access): \\
-   \url{https://www.iot-lab.info/tutorials/ssh-access/}
-   \item M3 nodes (Submit an experiment with web portal): \\
-   \url{https://www.iot-lab.info/tutorials/submit-experiment-m3-web/}
-   \item Build M3 and A8-M3 firmware (Compile firmware code for IoT-LAB)\\
-   \url{https://www.iot-lab.info/tutorials/openlab-compilation/}
-   \item Tools $\to$ Node -- cli client (Update firmware from command line) \\
-   \url{https://www.iot-lab.info/tutorials/iotlab-nodetools-client/}
+   \item Follow a video to launch your first experiment with the Webportal: \\
+   \url{https://www.iot-lab.info/learn/}
+   \item Configure IoT-LAB SSH access: \\
+   \url{https://www.iot-lab.info/docs/getting-started/ssh-access/}
+   \item Run an experiment with CLI command-line tools: \\
+   \url{https://www.iot-lab.info/learn/getting-started/microcontroller/}
 \end{enumerate}
 
 \section{Understand the environment for your experiments}
@@ -107,26 +89,30 @@ The results will be obtained in  \verb=csv= files, from which you can do plots w
 \section{Get ready for your experiments}
 Make sure you have completed all tutorials before proceeding.
 
-\subsection{Connect via ssh to the server}
-(You need to do this on each of the two days)
+\subsection{Connect via ssh to the server}  \label{sec:ssh}
+[You need to do this on each of the two days. On Day 1, you need to do this again, even if you have already done ssh earlier in Sect.~2, since now you will use the extra option \verb"-X"].\\
 
-Open a terminal, use \verb=ssh= to connect to your account and use \verb=cd= to change to \verb=distributed_algorithm= directory:
+Open a terminal on  your computer, use \verb=ssh= to connect to your account on the server and use \verb=cd= to change to \verb=distributed_algorithm= directory, as follows:
 \begin{verbatim}your_computer:$ ssh -X miscitXX@grenoble.iot-lab.info
 miscitXX@grenoble:~$ cd ~/distributed_algorithm
 miscitXX@grenoble:~/distributed_algorithm$
 \end{verbatim}
 This is where the files are sitting, that can be modified by you.
 Use \verb=ls= to see which files are there. 
-The files you will need to modify are some C files: \verb=config.h=, \verb=computing.c=, and \verb=clock_convergence.c=.
+The files you will need to modify are some C files: \verb=config.h=, \verb=computing.c=, and \verb=clock_convergence.c=.\\
 
 You can open and modify the files directly on the server, without downloading
 them to your local computer, just use \verb=nano <filename>.c= to open a file in
-a text editor. To save the file after having modified it, follow instructions to
-quit and then you will be prompted with the question whether you wish to save it
-(exit with \verb=Ctrl+x= and then \verb='O'= and \verb=Enter= to save).\\
+the \verb=nano= text editor. \\[2mm]
+To save changes: \verb=Ctrl+o= and then press \verb=Enter= \\
+To exit: \verb=Ctrl+x=\\
+
+%To save the file after having modified it, follow instructions to
+%quit and then you will be prompted with the question whether you wish to save it
+%(exit with \verb=Ctrl+x= and then \verb='Y'= and \verb=Enter= to save).\\
 If you are familiar with Linux, you can also use \verb=vim= (locally), instead of \verb=nano=.
 
-\subsection{On the first day}
+\subsection{Set up your experiment (on the first day only)}
 
 
 \subsubsection{Submit an experiment with the web portal}
@@ -134,7 +120,7 @@ Book 30 nodes for 3 hours, using the \verb=New Experiment= tab.
 \begin{itemize}
 \item Schedule:
 \subitem Set an experiment name (no spaces nor funny characters)
-\subitem Duration: 240~minutes (please set this duration although it seems too long when you set it at mid-morning on the first day; the reason is that at 8am on the second day you will reload the same experiment, without the possibility to set a different duration)
+\subitem Duration: 240~minutes (please set this duration although it seems too long when you set it at mid-morning on the first day; the reason is that on the second day you will reload the same experiment, without the possibility to set a different duration)
 \subitem As soon as possible
 \item Select Nodes properties and add to experiment: 
 \subitem Architecture: \texttt{M3 (At86rf231)} / Site: Grenoble / Number: $30$
@@ -148,7 +134,11 @@ Book 30 nodes for 3 hours, using the \verb=New Experiment= tab.
 Edit the file  \verb=config.h=. 
 You can use \verb=nano= as follows:
     \begin{verbatim}~/distributed_algorithm$ nano config.h \end{verbatim}
-Exit with \verb=Ctrl+x= and  press \verb='O'= and \verb=Enter= to save.\\
+%Exit with \verb=Ctrl+x= and  press \verb='O'= and \verb=Enter= to save.\\
+To save changes: \verb=Ctrl+o= and then press \verb=Enter= \\
+To exit: \verb=Ctrl+x= \\
+
+
     
 You will need to modify:
 		\begin{itemize}
@@ -170,7 +160,7 @@ You will need to modify:
         \end{itemize}
 
 Compile, using \verb=make=.
-    (It will run the compilation from \verb=build.m3= directory, as you did in the tutorial, and copy the result firmware in \verb=distributed_algorithm= directory.)
+    (This command will do for you all of the following: It will run the compilation from \verb=build.m3= directory, as you did in the tutorial, and copy the result firmware in \verb=distributed_algorithm= directory.)
     \begin{verbatim}~/distributed_algorithm$ make
 make -C ../../../build.m3 distributed_algorithm
   ...
@@ -178,7 +168,7 @@ make -C ../../../build.m3 distributed_algorithm
 \end{verbatim}
 
 After having compiled, you need to flash your executable file to all nodes.
-    \begin{verbatim}~/distributed_algorithm$ iotlab-node --update distributed_algorithm.elf
+    \begin{verbatim}~/distributed_algorithm$ iotlab-node --flash distributed_algorithm.elf
 # This takes a few seconds
 \end{verbatim}
 
@@ -240,15 +230,6 @@ Actually, this command downloads the whole results folder, not just the graph. Y
 
 
 
-
-\subsection{On the second day}
-On the web portal, click on your last
-experiment and click on \textbf{Reload}. This will ensure you are using the
-same nodes, and hence you can re-use the same graph. In case you use different nodes, instead, you will have to generate a new communication graph, following the same steps as in the first day.
-
-
-
-
 \section{Ex.~1: Synchronous consensus}
 
 \subsection{About synchronous consensus}
@@ -286,7 +267,9 @@ which will be denoted below with the short-hand notation
 \subsubsection{Edit} %Ex1
 Open and edit \verb=computing.c= using \verb=nano=:
 \begin{verbatim}~/distributed_algorithm$ nano computing.c \end{verbatim}
-After editing, exit with \verb=Ctrl+x= and  press \verb='O'= and \verb=Enter= to save.\\
+To save changes: \verb=Ctrl+o= and then press \verb=Enter= \\
+To exit: \verb=Ctrl+x=
+%After editing, exit with \verb=Ctrl+x= and  press \verb='Y'= and \verb=Enter= to save.\\
     
 
 You only need to modify the function \verb=compute_value_from_neighbours=.
@@ -315,7 +298,7 @@ make -C ../../../build.m3 distributed_algorithm
 \end{verbatim}
 
 After having compiled, flash your executable file to all nodes:
-    \begin{verbatim}~/distributed_algorithm$ iotlab-node --update distributed_algorithm.elf
+    \begin{verbatim}~/distributed_algorithm$ iotlab-node --flash distributed_algorithm.elf
 # This takes a few seconds
 \end{verbatim}
 
@@ -389,14 +372,29 @@ and a third column with the value of the state of this node at this iteration.
 \item Look at the communication graph, and check if it is undirected (all edges bi-directional) and connected. Please include the graph image in the report.
 %Also check if the graph seems to be static, by looking e.g. at the degrees of some nodes (degrees are transmitted at each time, and they are supposed to be time-invariant).
 \item For your consensus experiment with Metropolis weights, plot the trajectories of the states of all nodes. Do they converge? If so, to which value(s)?
-\item Look at the initial values in $x(0)$ and compute their average.
-\item Given the properties of the graph and the definition of Metropolis weights, what are the properties of matrix $P$? (is it stochastic? symmetric? doubly-stochastic? irreducible? aperiodic? primitive? -- justify your answers)
+\item Look at the initial values in $x(0)$ and compute their average. Compare it with the final value(s) of your trajectories.
+\item Given the properties of the graph and the definition of Metropolis weights, what are the properties of matrix $P$? 
+	\begin{itemize}
+	\item Is $P$ stochastic? symmetric? doubly-stochastic?
+	\item  $P$ is the weighted adjacency matrix (with positive weights) of a directed graph: find the strongly connected components and their period; find the condensed digraph: how many sinks does it have?
+	\end{itemize}
 \item 
-Explain the above-observed convergence to average consensus (of lack thereof) with these properties of $P$, using results about convergence of powers of stochastic matrices.
+Explain the above-observed convergence to average consensus (of lack thereof) with these properties of $P$ and of the associated digraph
 \item If you had time to run consensus with different choices of matrix $P$, plot and comment the trajectories also for these further experiments. Do they all converge to the same value? Which one is faster?
 \end{itemize}
 
 \newpage
+
+\section*{DAY 2}
+
+\subsection*{Restart your experiment (on the second day)}
+
+Connect via ssh to the server (same as on the first day, see Sect.~\ref{sec:ssh}).
+
+On the web portal, click on your last
+experiment and click on \textbf{Reload}. \\
+This will ensure you are using the
+same nodes, and hence you can re-use the same graph. In case you use different nodes, instead, you will have to generate a new communication graph, following the same steps as in the first day.
 
 
 \section{Ex.~2: Broadcast-gossip consensus}
@@ -426,7 +424,9 @@ Suggestion: use $\alpha = 1/2$.
 \subsubsection{Edit}
 Open and edit \verb=computing.c= using \verb=nano=:
 \begin{verbatim}~/distributed_algorithm$ nano computing.c \end{verbatim}
-After editing, exit with \verb=Ctrl+x= and  press \verb='O'= and \verb=Enter= to save.\\
+%After editing, exit with \verb=Ctrl+x= and  press \verb='Y'= and \verb=Enter= to save.\\
+To save changes: \verb=Ctrl+o= and then press \verb=Enter= \\
+To exit: \verb=Ctrl+x=\\
     
 
 You only need to modify the function \verb=compute_value_from_gossip=.
@@ -447,7 +447,7 @@ make -C ../../../build.m3 distributed_algorithm
 \end{verbatim}
 
 After having compiled, flash your executable file to all nodes:
-    \begin{verbatim}~/distributed_algorithm$ iotlab-node --update distributed_algorithm.elf
+    \begin{verbatim}~/distributed_algorithm$ iotlab-node --flash distributed_algorithm.elf
 # This takes a few seconds
 \end{verbatim}
 
@@ -507,15 +507,20 @@ plus a fourth column with the timestamp corresponding to the iteration (since wi
 Read the reminder about theory in Appendix~B, and then do the following analysis:
 \begin{itemize}
 \item Plot the trajectories of the states of all nodes. Do two plots: one plot with respect to absolute time (server time), in seconds; a second plot with respect to discrete time, i.e., number of iterations.
-\item Comment the plots. Do the nodes trajectories converge? If so, do they converge to a common value? Compare the final value(s) with the average of initial values.
+\item Comment the plots. Do the nodes trajectories converge? If so, do they converge to a common value?
+\item Look at the initial values in $x(0)$ and compute their average. Compare it with the final value(s) of your trajectories.
 %\item Look at the graph, and check if it is undirected (all edges bi-directional) and connected. Please include the graph image in the report.
 %Also check if the graph seems to be static, by looking e.g. at the degrees of some nodes (degrees are transmitted at each time, and they are supposed to be time-invariant).
-\item  If you run again the algorithm, with same initial values but different pseudo-random transmission sequence, do you think the final value will be the same? Explain why [it is not compulsory to run it, just to answer this question; time-permitting you can run it]
 \item Consider the description in Appendix~B of matrices $P^{(1)}, \dots, P^{(n)} $. Write a mathematical expression for the entries of $P^{(i)}$. Then, consider $P(k)$ a random matrix uniform over the set $\{P^{(1)}, \dots, P^{(n)}\}$, and compute its expected value $\bar P := \mathbb E P(k)$ (hint: $\bar P = \sum_{i=1}^n \frac{1}{n} P^{(i)}$).
 Try to find a mathematical expression for $\bar P$, involving: the Adjacency or the Laplacian matrix of the graph, and the parameter $\alpha$.
 In case you are unable to find this expression, you can try finding the numerical entries of $\bar P$ for an example, possibly a smaller example than the 30-nodes graph used in your experiment.
-\item Given $\bar P$, what can you say about the expected trajectory $\bar x(k)$? Do all expected trajectories converge to average consensus? Why?
-\item Trajectories in one realization of the pseudo-random algorithm (such as in your plot) are not necessarily the same as expected trajectories. Comment whether or not your plot is similar to the expected trajectories.
+\item Given $\bar P$, what can you say about the expected trajectory $\bar x(k)$? Does it converge to average consensus? Why?
+\item 
+Your plot (with respect to number of iterations) shows $x(k)$ in one realization of the pseudo-random algorithm.
+	\begin{itemize}
+	\item  If you run again the algorithm, with same initial values but different pseudo-random transmission sequence, do you think the limit for $k\to \infty$ will be the same? Explain why 
+	\item Compare the limit for $k \to \infty$ of your realization $x(k)$ and of the expectation $\bar x(k)$ (If you wish, you can plot $\bar x(k)$ by running $\bar x(k+1) = \bar P \bar x(k)$ with $\bar x(0) = x(0)$, but this is not required, just use the knowledge that you have from the theory).
+	\end{itemize}
 %\item (bonus question) Verify whether assumptions of Theorem~1 (in Appendix~B)  are verified by $P(k)$ as above.
 \end{itemize}
 
@@ -528,9 +533,10 @@ In case you are unable to find this expression, you can try finding the numerica
 
 \subsection{About broadcast-gossip clock-synchronization}
 
-You will be implementing the `RandSync-Bcast' clock-synchronization protocol introduced in \cite{RandSync-journal}.
+You will be implementing the `RandSync-Bcast' clock-synchronization protocol %introduced in
+ \cite{RandSync-journal}.
 
-You are given a broadcast-gossip tranmission scheme, truly implemented with independent local Poisson clocks at each sensor (with intensity $\lambda$ chosen as an option when running the experiment; recommended value is $\lambda = 0.2$). When a sensor wakes up, it transmits a message to all of its neighbors.\\
+You are given a broadcast-gossip tranmission scheme, truly implemented with independent local Poisson clocks at each sensor (with intensity $\lambda$ chosen as an option when running the experiment; recommended value is $\lambda = 0.2$). When a sensor wakes up, it transmits a message to all of its neighbors.
 
 Each sensor has a local system time, based on the internal physical hardware clock (quartz oscillator). The local system times of different sensors are slightly different, both in the slope of their increase and in the offset due to different starting times. The goal is to compute a virtual time for each sensor, based both on the local system time and on some exchanged messages, in such a way that virtual times tend to synchronize to a common time. This clock synchronization is truly needed in sensor networks, but clock differences are small and become apparent only on quite long time scales (several hours or days); for the purpose of the exercise, local times have been tweaked to have larger differences than in real life, so as to be significant over the short time of the exercise: the (fictitious) system time of node $i$ is obtained from its hardware clock as follows:
 \[ %\begin{equation} \label{eq:system-clocks}
@@ -543,6 +549,7 @@ where $a$ and $b$ are random variables uniform in $[0,1]$ (they represent random
 
 
 \textbf{Algorithm to be implemented:}\\
+
 When a node $i$ wakes up for transmission, it sends its current virtual time  $t_{\text{virt}, i}$ to its neighbors.
 Each such neighbor uses the received information to do some update that will be described below.
 
@@ -551,11 +558,11 @@ A node $i$ knows its current system time $t_{\text{sys}, i}$, and moreover it ha
 \item $t_{\text{virt}, i}$, its current virtual time;
 \item $t_{\text{virt}, \text{up}, i}$, the virtual time that it had at the moment of the last update (i.e., when it received the most recent message from a neighbor)
 \item  $t_{\text{sys}, \text{up}, i}$, the local system time that it had at the moment of the last update
-\item $k_{\text{up},i}$, an	 auxiliary variable, representing the slope of increase of virtual time; this variable is changed during updates and then kept consant until the next received message.
+\item $k_{\text{up},i}$, an	 auxiliary variable, representing the slope of increase of virtual time; this variable is changed during updates and then kept constant until the next received message.
 \end{itemize}
 
 
-As initialization, for all $i$, let $t_{\text{virt}, \text{up}, i}= t_{\text{sys}, \text{up}, i}= b \, \verb=TIME_OFFSET_RANDOM=  $ (i.e., they are equal to $t_{\text{sys}, i}$ initially, when $t_{\text{hardware}, i} =0$), and  $k_{\text{up},i}=1$. \\
+The initialization is: for all $i$, $t_{\text{virt}, \text{up}, i}= t_{\text{sys}, \text{up}, i}= b \, \verb=TIME_OFFSET_RANDOM=  $ (i.e., they are equal to $t_{\text{sys}, i}$ initially, when $t_{\text{hardware}, i} =0$), and  $k_{\text{up},i}=1$. \\
 
 Each node $i$ keeps the local virtual time always running as follows (including when not receiving any message):
 \[ %\begin{equation} \label{virtual-clock}
@@ -626,7 +633,7 @@ make -C ../../../build.m3 distributed_algorithm
 \end{verbatim}
 
 After having compiled, flash your executable file to all nodes:
-    \begin{verbatim}~/distributed_algorithm$ iotlab-node --update distributed_algorithm.elf
+    \begin{verbatim}~/distributed_algorithm$ iotlab-node --flash distributed_algorithm.elf
 # This takes a few seconds
 \end{verbatim}
 
@@ -754,14 +761,15 @@ Also notice that the dynamics of $\bar x(k)$ are not random, this is the same as
 
 
 It is important to notice that even if we can prove that the expected value $\bar x(k)$ converges to consensus, this does not imply that the random trajectories $x(k)$ will converge.
-We need a deeper theoretical result to study convergence of random trajectories. The following theorem ensures that, under suitable conditions, the random trajectories do converge with high probability to a consensus (i.e., a common value), but this value might not be the same as the one to which $\bar x(k)$ converges.
+We need a deeper theoretical result to study convergence of random trajectories. The following theorem ensures that, under suitable conditions, the random trajectories do converge with high probability to a consensus (i.e., a common value), but this value might not be the same as the one to which $\bar x(k)$ converges.\\
 
 %	About convergence of random trajectories, the following theorem holds:\\
-	\textit{Theorem~1 (\cite{gossip-converg-as}, Coroll.~3.2})\\
+	\textit{Theorem~1 (\cite{gossip-converg-as}, Coroll.~3.2})\qquad
 	Assume that:
 		\begin{itemize}
-		\item For all node $i$, $P_{ii}(k)>0$ almost surely,
-		\item the graph associated with $\bar P$ is strongly connected.
+		\item P(k) are stochastic matrices, i.i.d.\ with mean $\bar P$; 
+		\item For all node $i$, $P_{ii}(k)>0$ almost surely;
+		\item The graph associated with $\bar P$ is strongly connected.
 		\end{itemize}
 	Then, $x(k)$ achieves probabilistic consensus, i.e.:
 		\begin{itemize}
@@ -773,11 +781,13 @@ We need a deeper theoretical result to study convergence of random trajectories.
 %	Verify that the assumptions of this theorem are satisfied by the broadcast gossip consensus that we are considering.
 %	 \item
 
-	 Theorem~1 guarantees almost sure convergence to a common consensus value. However, in general the consensus value $x_{\infty}$ is a random variable: for given initial values, it can vary depending on the random sequence $P(k)$ (i.e., depending on the random transmissions). For the broadcast gossip averaging algorithm, if the graph is undirected, in expectation we have $\bar P$ which is doubly-stochastic, so that the expectation $\bar x(k)$ will converge to average consensus, but each random realization $x(k)$ needs not to do so. The following theorem guarantees that the error between the random final value $x_{\infty}$ and the correct expected final value $\frac{1}{n}\sum_i x_i(0)$ cannot be too bad, there is an ensured upper bound for it, described below \textit{[read it, for your information, but you will not need this for the report]}.
+	 Theorem~1 guarantees almost sure convergence to a common consensus value for the broadcast gossip algorithm on a strongly connected graph. However, in general the consensus value $x_{\infty}$ is a random variable: for given initial values, it can vary depending on the random sequence $P(k)$ (i.e., depending on the random transmissions). For the broadcast gossip averaging algorithm, if the graph is undirected, in expectation we have $\bar P$ which is doubly-stochastic, so that the expectation $\bar x(k)$ will converge to average consensus, but each random realization $x(k)$ needs not to do so.
+	 
+	  The following theorem guarantees that the error between the random final value $x_{\infty}$ and the correct expected final value $\frac{1}{n}\sum_i x_i(0)$ cannot be too bad, there is an ensured upper bound for it, described below \textit{[read it, for your information, but you will not need this for the report]}.
 
 	 Denote by $\bar x(k) :=  \mathbb E x(k)$ the expectation of the state, and denote by $x_{\text{ave}}(k) := \frac{1}{n}\sum_i x_i(k)$ the scalar random value obtained as the average of the states $x_i(k)$ at a given time $k$; notice that $x_{\text{ave}}(0)$ is not random, and is the desired average of the initial values.
 	 Define $V(0) = \frac{1}{n} \sum_i (x_i(0) - x_{\text{ave}}(0))^2 $; this is a measure of dispersion of the initial values (it is natural to expect that the smaller $V(0)$ is, the easier it is to go to average consensus, since initial values are already near to it). Define $\gamma:= \frac{\alpha}{1-\alpha} d_{\max}$,
-	 where $\alpha$ is the parameter used in the averaging broadcast gossip update and $d_{\max}$ is the maximum of the out-degrees of all nodes (out-degree being the number of neighbors to which a node can broadcast).
+	 where $\alpha$ is the parameter used in the averaging broadcast gossip update and $d_{\max}$ is the maximum of the out-degrees of all nodes (out-degree being the number of neighbors to which a node can broadcast).\\
 
 	\textit{Theorem~2 (\cite{gossip-small-error}, Theorem~1 and Example~2)}\\
 For the averaging broadcast gossip algorithm and with the above definitions, the following bound holds true:
@@ -794,7 +804,9 @@ $x(k)$ converges almost surely to $x_{\infty} \mathbf 1$ for some random variabl
 
 
 
-\begin{thebibliography}{99}
+\begin{thebibliography}{6}
+
+\small
 
 \bibitem{bullo-book}
 F. Bullo, Lectures on Network Systems, CreateSpace, 2018, Available on-line: \url{http://motion.me.ucsb.edu/book-lns}
