@@ -18,7 +18,10 @@
 #
 
 project(HiKoB_Openlab)
-cmake_minimum_required(VERSION 2.6)
+##  Compatibility with CMake < 2.8.12 will be removed from a future version of CMake
+cmake_minimum_required(VERSION 2.8.12)
+## https://cmake.org/cmake/help/latest/policy/CMP0115.html
+cmake_policy(SET CMP0115 OLD)
 
 ##
 ## Doxygen
