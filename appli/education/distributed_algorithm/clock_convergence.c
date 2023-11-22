@@ -7,7 +7,10 @@
 #include "clock_convergence.h"
 #include "config.h"
 
-#define RAND_DOUBLE() (random_rand16() / ((float)(1<<16)))
+// returns a pseudo-random in [0,1]
+#define RAND_01_DOUBLE() (rand() / (float)RAND_MAX)
+// returns a pseudo-random in [-1,1]
+#define RAND_11_DOUBLE() (2 * (rand() / (float)RAND_MAX) - 1)
 #define TIMER_TIME() (((double)soft_timer_time()) / SOFT_TIMER_FREQUENCY)
 
 
@@ -103,8 +106,8 @@ void clock_convergence_init(double time_scale, double time_scale_random,
         double time_offset_random)
 {
     cfg.system_t.time_0 = TIMER_TIME();
-    cfg.system_t.offset = time_offset_random * RAND_DOUBLE();
-    cfg.system_t.scale = time_scale + time_scale_random * RAND_DOUBLE();
+    cfg.system_t.offset = time_offset_random * RAND_01_DOUBLE();
+    cfg.system_t.scale = time_scale + time_scale_random * RAND_11_DOUBLE();
 }
 
 /* Timer handler */
