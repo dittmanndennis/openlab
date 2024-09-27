@@ -6,9 +6,12 @@ add_subdirectory(print_uids)
 add_subdirectory(gps_synced_sniffer)
 add_subdirectory(leds_chaser)
 add_subdirectory(embers_sensors)
+add_subdirectory(measure_energy)
+add_subdirectory(receive_energy)
 
 if(${PLATFORM_HAS_CSMA})
 add_subdirectory(tutorial)
+add_subdirectory(transmission_test)
 endif(${PLATFORM_HAS_CSMA})
 
 if(${PLATFORM_HAS_LSM303DLHC})
