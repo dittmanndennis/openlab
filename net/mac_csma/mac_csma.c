@@ -174,6 +174,18 @@ int mac_csma_data_send(uint16_t dest_addr, const uint8_t *data, uint8_t length)
     return 1;
 }
 
+void mac_csma_set_power(phy_power_t tx_power)
+{
+    take();
+
+    phy_idle(mac.phy);
+    // Set power
+    mac.tx_power = tx_power;
+    phy_set_power(mac.phy, mac.tx_power);
+
+    give();
+}
+
 /** Enter RX state */
 static void csma_enter_rx(handler_arg_t arg)
 {

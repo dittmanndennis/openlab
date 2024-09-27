@@ -39,6 +39,29 @@
 
 /* Private Variables */
 static timestamp_handler_cb_t phy_timestamp_handler;
+#ifdef DELAY_RX
+volatile uint8_t rx_sync_messages = 0;//SYNC_MESSAGES_RX;
+volatile uint8_t rx_threshold = 0;
+static uint8_t rx_threshold_cases = MEASUREMENTS_PER_CASE;
+enum rf2xx_phy_rx_threshold rx_threshold_list[16] = {
+    RF2XX_PHY_RX_THRESHOLD__m101dBm,
+    RF2XX_PHY_RX_THRESHOLD__m90dBm,
+    RF2XX_PHY_RX_THRESHOLD__m87dBm,
+    RF2XX_PHY_RX_THRESHOLD__m84dBm,
+    RF2XX_PHY_RX_THRESHOLD__m81dBm,
+    RF2XX_PHY_RX_THRESHOLD__m78dBm,
+    RF2XX_PHY_RX_THRESHOLD__m75dBm,
+    RF2XX_PHY_RX_THRESHOLD__m72dBm,
+    RF2XX_PHY_RX_THRESHOLD__m69dBm,
+    RF2XX_PHY_RX_THRESHOLD__m66dBm,
+    RF2XX_PHY_RX_THRESHOLD__m63dBm,
+    RF2XX_PHY_RX_THRESHOLD__m60dBm,
+    RF2XX_PHY_RX_THRESHOLD__m57dBm,
+    RF2XX_PHY_RX_THRESHOLD__m54dBm,
+    RF2XX_PHY_RX_THRESHOLD__m51dBm,
+    RF2XX_PHY_RX_THRESHOLD__m48dBm
+};
+#endif
 
 /* Private Functions */
 /** Convert Power from PHY power to RF231 power */
@@ -1113,6 +1136,7 @@ static void reset(phy_rf2xx_t *_phy)
 
     if (rf2xx_get_type(_phy->radio) == RF2XX_TYPE_2_4GHz)
     {
+        printf("250 kb/s\n\n");
         // Enable Dynamic Frame Buffer Protection, standard data rate (250kbps)
         reg = RF2XX_TRX_CTRL_2_MASK__RX_SAFE_MODE;
         rf2xx_reg_write(_phy->radio, RF2XX_REG__TRX_CTRL_2, reg);
@@ -1125,6 +1149,7 @@ static void reset(phy_rf2xx_t *_phy)
     }
     else
     {
+        printf("500 kb/s\n\n");
         // Enable Dynamic Frame Buffer Protection, OQPSK-200
         reg = RF2XX_TRX_CTRL_2_MASK__RX_SAFE_MODE
                 | RF2XX_TRX_CTRL_2_MASK__BPSK_OQPSK
@@ -1352,6 +1377,16 @@ static phy_status_t handle_rx_start(phy_rf2xx_t *_phy)
         return PHY_RX_CRC_ERROR;
     }
 
+#ifdef DELAY_RX
+    // Set RSSI threshold
+    if(rx_sync_messages == 0 && rx_threshold_cases == 0 && rx_threshold < 16)
+    {
+        rx_sync_messages = 0;//SYNC_MESSAGES_RX;
+        rx_threshold_cases = MEASUREMENTS_PER_CASE;
+        rf2xx_set_rx_rssi_threshold(((phy_rf2xx_t*) platform_phy)->radio, rx_threshold_list[rx_threshold++]);
+    }
+#endif
+
     // Read length byte (first byte)
     _phy->pkt->length = rf2xx_fifo_read_first(_phy->radio);
 
@@ -1493,6 +1528,18 @@ static void handle_irq(handler_arg_t arg)
             // Check if TRX_END happened
             else if (irq_status == RF2XX_IRQ_STATUS_MASK__TRX_END)
             {
+#ifdef DELAY_RX
+                if(rx_sync_messages == 0)
+                {
+                    rx_threshold_cases--;
+                    printf("> Delay processing of RX by 2 seconds\n");
+                    vTaskDelay(2 * configTICK_RATE_HZ);
+                }
+                else
+                {
+                    rx_sync_messages--;
+                }
+#endif
                 // Start processing
                 phy_status_t status = handle_rx_start(_phy);
                 // Call handler on error
@@ -1592,6 +1639,10 @@ static void tx_start_handler(handler_arg_t arg, uint16_t timer_value)
 
     if (_phy->state == PHY_STATE_TX_WAIT)
     {
+#ifdef DELAY_TX
+        printf("> Delay start of TX by 2 seconds\n\n");
+        vTaskDelay(2 * configTICK_RATE_HZ);
+#endif
         // Start TX by setting SLP_TR if it wasn't set
         rf2xx_slp_tr_set(_phy->radio);
 
@@ -1612,6 +1663,9 @@ static void tx_start_handler(handler_arg_t arg, uint16_t timer_value)
 
         // Store State
         _phy->state = PHY_STATE_TX;
+        // Another delay makes the energy consumption readings inconsistent
+        //printf("> Delay TX interrupt by 2 seconds\n");
+        //vTaskDelay(2 * configTICK_RATE_HZ);
 
         // Disable timer
         timer_set_channel_compare(_phy->timer, _phy->channel, 0, NULL, NULL);

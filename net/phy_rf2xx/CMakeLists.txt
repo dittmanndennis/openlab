@@ -21,3 +21,12 @@
 add_library(phy_rf2xx STATIC 
 	phy_rf2xx)
 target_link_libraries(phy_rf2xx softtimer event)
+
+add_library(phy_rf2xx_delay_rx STATIC 
+	phy_rf2xx)
+target_link_libraries(phy_rf2xx_delay_rx softtimer event)
+target_compile_definitions(phy_rf2xx_delay_rx PRIVATE -DDELAY_RX)
+add_library(phy_rf2xx_delay_tx STATIC 
+	phy_rf2xx)
+target_link_libraries(phy_rf2xx_delay_tx softtimer event)
+target_compile_definitions(phy_rf2xx_delay_tx PRIVATE -DDELAY_TX)

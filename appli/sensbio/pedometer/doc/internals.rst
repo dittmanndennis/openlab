@@ -1,1 +1,1 @@
-.. include:: ../INTERNALS.rst
+.. include:: ../INTERNALS_doc.rst

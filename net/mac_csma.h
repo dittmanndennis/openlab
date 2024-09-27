@@ -44,6 +44,11 @@ extern const mac_csma_config_t mac_csma_config;
 void mac_csma_init(int channel, phy_power_t tx_power);
 
 /**
+ * Set radio power
+ */
+void mac_csma_set_power(phy_power_t tx_power);
+
+/**
  * Send some data to a node
  */
 int mac_csma_data_send(uint16_t dest_addr, const uint8_t *data, uint8_t length);

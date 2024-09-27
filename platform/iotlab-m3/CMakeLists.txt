@@ -34,6 +34,26 @@ add_library(platform STATIC
 	iotlab-m3_net
 	)
 
+
+add_library(platform_delay_rx STATIC
+	${PROJECT_SOURCE_DIR}/platform/platform
+	iotlab-m3
+	iotlab-m3_leds
+	iotlab-m3_drivers
+	iotlab-m3_lib
+	iotlab-m3_periph
+	iotlab-m3_net
+	)
+add_library(platform_delay_tx STATIC
+	${PROJECT_SOURCE_DIR}/platform/platform
+	iotlab-m3
+	iotlab-m3_leds
+	iotlab-m3_drivers
+	iotlab-m3_lib
+	iotlab-m3_periph
+	iotlab-m3_net
+	)
+
 # Allow for some more cyclic deps in libraries
 set_property(TARGET platform APPEND PROPERTY LINK_INTERFACE_MULTIPLICITY 3)
 
@@ -60,3 +80,45 @@ target_link_libraries(platform
 # Net
 	phy_rf2xx)
 
+target_link_libraries(platform_delay_rx
+# Driver
+	drivers_stm32f1xx
+	
+# Periph
+	rf2xx
+	lsm303dlhc
+	l3g4200d
+	lps331ap
+	isl29020
+	n25xxx
+	
+# Lib
+	freertos
+	random
+	printf
+	event
+	softtimer
+	
+# Net
+	phy_rf2xx_delay_rx)
+target_link_libraries(platform_delay_tx
+	# Driver
+		drivers_stm32f1xx
+		
+	# Periph
+		rf2xx
+		lsm303dlhc
+		l3g4200d
+		lps331ap
+		isl29020
+		n25xxx
+		
+	# Lib
+		freertos
+		random
+		printf
+		event
+		softtimer
+		
+	# Net
+		phy_rf2xx_delay_tx)
