@@ -1113,6 +1113,7 @@ static void reset(phy_rf2xx_t *_phy)
 
     if (rf2xx_get_type(_phy->radio) == RF2XX_TYPE_2_4GHz)
     {
+        printf("250 kb/s\n\n");
         // Enable Dynamic Frame Buffer Protection, standard data rate (250kbps)
         reg = RF2XX_TRX_CTRL_2_MASK__RX_SAFE_MODE;
         rf2xx_reg_write(_phy->radio, RF2XX_REG__TRX_CTRL_2, reg);
@@ -1125,6 +1126,7 @@ static void reset(phy_rf2xx_t *_phy)
     }
     else
     {
+        printf("500 kb/s\n\n");
         // Enable Dynamic Frame Buffer Protection, OQPSK-200
         reg = RF2XX_TRX_CTRL_2_MASK__RX_SAFE_MODE
                 | RF2XX_TRX_CTRL_2_MASK__BPSK_OQPSK
@@ -1592,6 +1594,8 @@ static void tx_start_handler(handler_arg_t arg, uint16_t timer_value)
 
     if (_phy->state == PHY_STATE_TX_WAIT)
     {
+        printf("> Delay start of TX by 2 seconds\n\n");
+        vTaskDelay(2 * configTICK_RATE_HZ);
         // Start TX by setting SLP_TR if it wasn't set
         rf2xx_slp_tr_set(_phy->radio);
 
@@ -1612,6 +1616,9 @@ static void tx_start_handler(handler_arg_t arg, uint16_t timer_value)
 
         // Store State
         _phy->state = PHY_STATE_TX;
+        // Another delay makes the energy consumption readings inconsistent
+        //printf("> Delay TX interrupt by 2 seconds\n");
+        //vTaskDelay(2 * configTICK_RATE_HZ);
 
         // Disable timer
         timer_set_channel_compare(_phy->timer, _phy->channel, 0, NULL, NULL);
